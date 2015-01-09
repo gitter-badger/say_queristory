@@ -13,5 +13,7 @@ TweetStream.configure do |config|
 end
 
 TweetStream::Client.new.follow(2503690447) do |status|
-  `say "#{status.text.gsub(URI.regexp(['http', 'https']), '')}"`
+  text_to_speech = status.text.gsub(URI.regexp(['http', 'https']), '')
+  text_to_speech = text_to_speech.gsub(' ', '、')
+  `say "#{text_to_speech}"`
 end
