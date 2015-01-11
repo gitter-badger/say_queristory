@@ -25,7 +25,7 @@ TweetStream::Client.new.follow(2503690447) do |status|
   if has_multi_byte?(text_to_speech)
     text_to_speech = text_to_speech.gsub(' ', '、')
   else
-    options = '-vVicki'
+    options = '-vKaren'
   end
 
   `say "#{options}" "#{text_to_speech}"`
