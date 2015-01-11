@@ -3,6 +3,13 @@ require 'tweetstream'
 require 'dotenv'
 require 'uri'
 
+def has_multi_byte?(str)
+  str.bytes do |b|
+    return true if  (b & 0b10000000) != 0
+  end
+  false
+end
+
 TweetStream.configure do |config|
   Dotenv.load
   config.consumer_key       = ENV['CONSUMER_KEY']
@@ -14,6 +21,12 @@ end
 
 TweetStream::Client.new.follow(2503690447) do |status|
   text_to_speech = status.text.gsub(URI.regexp(['http', 'https']), '')
-  text_to_speech = text_to_speech.gsub(' ', '、')
-  `say "#{text_to_speech}"`
+
+  if has_multi_byte?(text_to_speech)
+    text_to_speech = text_to_speech.gsub(' ', '、')
+  else
+    options = '-vVicki'
+  end
+
+  `say "#{options}" "#{text_to_speech}"`
 end
